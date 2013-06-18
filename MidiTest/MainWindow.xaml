@@ -1,0 +1,36 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:MidiTest"
+        xmlns:Properties="clr-namespace:MidiTest.Properties" x:Class="MidiTest.MainWindow"
+        Title="MidiTest" Height="290" Width="530" MinWidth="530" MinHeight="290" MaxHeight="290">
+    <Window.Resources>
+        <vm:Inverter x:Key="Inverter"/>
+        <vm:StateToStringConverter x:Key="StateToStringConverter"/>
+    </Window.Resources>
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Label Content="出力先" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <ComboBox Margin="61,12,90,0" VerticalAlignment="Top" ItemsSource="{Binding Devices}" SelectedItem="{Binding SelectedDevice,Mode=TwoWay}" IsEnabled="{Binding Started,Converter={StaticResource Inverter}}"/>
+        <Button Content="{Binding Started,Converter={StaticResource StateToStringConverter}}" Command="{Binding OpenCommand}" Margin="0,12,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75"/>
+        <Grid Height="28" Margin="10,43,10,0" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1.5*"/>
+            </Grid.ColumnDefinitions>
+            <Label Content="チャンネル" HorizontalAlignment="Left" Width="70"/>
+            <ComboBox Margin="75,2,0,2" ItemsSource="{Binding Channels}" SelectedValuePath="Channel" SelectedValue="{Binding SelectedChannel}"/>
+            <Label Content="メッセージタイプ" Grid.Column="1" HorizontalAlignment="Left" Width="106"/>
+            <ComboBox Margin="111,2,0,2" Grid.Column="1" ItemsSource="{Binding MessageTypes}" SelectedItem="{Binding SelectedMessageType,Mode=TwoWay}"/>
+        </Grid>
+        <Label Content="データバイト1" HorizontalAlignment="Left" Margin="10,76,0,0" VerticalAlignment="Top"/>
+        <Slider Margin="10,109,56,0" VerticalAlignment="Top" TickPlacement="Both" Maximum="127" IsSnapToTickEnabled="True" Value="{Binding DataByte1,Mode=TwoWay}"/>
+        <TextBox HorizontalAlignment="Right" Height="23" Margin="0,112,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="41" Text="{Binding DataByte1,Mode=TwoWay,UpdateSourceTrigger=LostFocus}"/>
+        <Label Content="データバイト2" HorizontalAlignment="Left" Margin="10,144,0,0" VerticalAlignment="Top"/>
+        <Slider Margin="10,177,56,0" VerticalAlignment="Top" TickPlacement="Both" Maximum="127" IsSnapToTickEnabled="True" Value="{Binding DataByte2,Mode=TwoWay}"/>
+        <TextBox HorizontalAlignment="Right" Height="23" Margin="0,180,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="41" Text="{Binding DataByte2,Mode=TwoWay,UpdateSourceTrigger=LostFocus}"/>
+        <Button Content="Send" Margin="10,212,10,0" VerticalAlignment="Top" Command="{Binding SendMessageCommand}"/>
+    </Grid>
+</Window>
